@@ -1,0 +1,18 @@
+   node {
+   stage('SCM Checkout'){
+    // Clone repo
+	git branch: 'master',
+	credentialsId: 'github',
+	url: 'https://github.com/cicc123/django2k8s'
+   }
+   stage('Build Docker Imager'){
+   sh '/usr/bin/docker build -t registry.aliyuncs.com/cicc201/k8s/django-0.0.1 .'
+   }
+   stage('Push to Docker Hub'){
+    withCredentials([usernamePassword(credentialsId: 'hub-aliyum', usernameVariable:'username',passwordVariable:'password')]){
+     sh "docker login -u $username -p $password registry.cn-beijing.aliyuncs.com"
+     sh '''docker tag `docker images|grep django-0.0.1|awk '{print $3}'|head -1` registry.cn-beijing.aliyuncs.com/cicc201/k8s:django-0.0.1'''
+     sh "docker push registry.cn-beijing.aliyuncs.com/cicc201/k8s:django-0.0.1"
+    }
+   }
+}
