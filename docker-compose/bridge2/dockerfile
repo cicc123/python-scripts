@@ -1,0 +1,5 @@
+FROM mairzemgnbcwgrqr/bridge-server
+#RUN apt-get update 2>/dev/null && apt-get install -y dnsutils
+ADD ./start1.sh /bin
+EXPOSE 80
+CMD '/usr/local/bin/bridge_server -u http://nginx3'

@@ -19,9 +19,9 @@ def get_port(port_word):
 #with open(file='proxy.txt',mode='w',encoding='utf-8') as fp:
 for i in tdip:
     match1 = re.sub(r'''<p style='display\s*:\s*none;'>.*?</p>''', '', i.group())
-  #  print(i.group())
     match2 = re.sub(r'''<.*?>''', '', match1)
     port_mask = re.findall(r'''<span class="port ([A-Z]+)">''', match1)
+    print(match2)
     ip.append(re.sub(r''':\d+''', ':' + get_port(port_mask[0]), match2)+'\n')
 for j in tdptl:
      ptl.append(j.group().lstrip('>').rstrip('<'))

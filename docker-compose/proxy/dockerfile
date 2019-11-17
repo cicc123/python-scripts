@@ -1,0 +1,4 @@
+FROM nginx
+ADD ./nginx.conf /etc/nginx/
+EXPOSE 80
+CMD /bin/sh -c 'nginx -g "daemon off;"'

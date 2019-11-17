@@ -1,0 +1,149 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nginx3
+spec:
+  selector:
+    matchLabels:
+      name: nginx3
+  template:
+    metadata:
+      labels:
+        name: nginx3
+    spec:
+      containers:
+        - name: nginx3
+          image: registry.cn-beijing.aliyuncs.com/cicc201/k8s:app_threading-0.0.1
+          imagePullPolicy: IfNotPresent
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: bridge1
+spec:
+  selector:
+    matchLabels:
+      name: bridge1
+  template:
+    metadata:
+      labels:
+        name: bridge1
+    spec:
+      containers:
+        - name: bridge1
+          image: registry.cn-beijing.aliyuncs.com/cicc201/k8s:compose-bridge-0.0.1
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/start1.sh"]
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: bridge2
+spec:
+  selector:
+    matchLabels:
+      name: bridge2
+  template:
+    metadata:
+      labels:
+        name: bridge2
+    spec:
+      containers:
+        - name: bridge2
+          image: registry.cn-beijing.aliyuncs.com/cicc201/k8s:compose-bridge-0.0.1
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/start1.sh"]
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: proxy
+spec:
+  selector:
+    matchLabels:
+      name: proxy
+  template:
+    metadata:
+      labels:
+        name: proxy
+    spec:
+      containers:
+        - name: proxy
+          image: registry.cn-beijing.aliyuncs.com/cicc201/k8s:compose-proxy-0.0.1
+          imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    component: nginx3
+    provider: kubernetes
+  name: nginx3
+  namespace: default
+spec:
+  selector:
+    name: nginx3
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    component: bridge1
+    provider: kubernetes
+  name: bridge1
+  namespace: default
+spec:
+  selector:
+    name: bridge1
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    component: bridge2
+    provider: kubernetes
+  name: bridge2
+  namespace: default
+spec:
+  selector:
+    name: bridge2
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    component: proxy
+    provider: kubernetes
+  name: proxy
+  namespace: default
+spec:
+  selector:
+    name: proxy
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  sessionAffinity: None
+  type: ClusterIP
