@@ -1,0 +1,7 @@
+docker tag [imageid] registry.cn-beijing.aliyuncs.com/cicc201/k8s:compose-proxy-0.0.1
+docker tag [imageid] registry.cn-beijing.aliyuncs.com/cicc201/k8s:compose-bridge-0.0.1
+docker tag [imageid] registry.cn-beijing.aliyuncs.com/cicc201/k8s:compose-nginx-0.0.1
+docker push registry.cn-beijing.aliyuncs.com/cicc201/k8s:compose-proxy-0.0.1
+docker push registry.cn-beijing.aliyuncs.com/cicc201/k8s:compose-bridge-0.0.1
+docker push registry.cn-beijing.aliyuncs.com/cicc201/k8s:compose-nginx-0.0.1
+
